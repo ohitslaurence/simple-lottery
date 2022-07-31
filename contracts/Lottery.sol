@@ -1,14 +1,12 @@
 //SPDX-License-Identifier: GPL-3.0
 
 pragma solidity ^0.8.13;
-import "hardhat/console.sol";
 
 /**
  @title Lottery
  */
 contract Lottery {
-    // declaring the state variables
-    address[] public players; //dynamic array of type address payable
+    address[] public players;
     address[] public gameWinners;
     address public owner;
 
@@ -17,7 +15,6 @@ contract Lottery {
         _;
     }
 
-    // declaring the constructor
     constructor() {
         owner = msg.sender;
     }
@@ -33,7 +30,7 @@ contract Lottery {
         return address(this).balance;
     }
 
-    // selecting the winner
+    // select the winner of the lottery
     function pickWinner() public onlyOwner {
         require(players.length >= 3, "NOT_ENOUGH_PLAYERS");
 
@@ -41,7 +38,7 @@ contract Lottery {
         address winner = players[randomIndex];
 
         gameWinners.push(winner);
-        players = new address[](0);
+        delete players;
 
         (bool success, ) = winner.call{value: getBalance()}("");
         require(success, "TRANSFER_FAILED");
