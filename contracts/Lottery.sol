@@ -40,7 +40,7 @@ contract Lottery {
         gameWinners.push(winner);
         delete players;
 
-        (bool success, ) = winner.call{value: getBalance()}("");
+        (bool success, ) = winner.call{value: address(this).balance}("");
         require(success, "TRANSFER_FAILED");
     }
 
